@@ -18,7 +18,7 @@ export function baseOptions(): BaseLayoutProps {
       },
       {
         text: 'Get API Key',
-        url: 'https://app.scalereach.ai/settings/api-keys',
+        url: 'https://app.scalereach.ai',
       },
     ],
   };
