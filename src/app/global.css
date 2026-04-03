@@ -16,6 +16,11 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* Hide the sidebar theme toggle (already in navbar) */
+[data-sidebar] [data-theme-toggle] {
+  display: none;
+}
+
 html>body[data-scroll-locked] {
   margin-right: 0px !important;
   --removed-body-scroll-bar-size: 0px !important;

@@ -13,9 +13,6 @@ export default function Layout({ children }: LayoutProps<'/docs'>) {
             © {new Date().getFullYear()} ScaleReach
           </div>
         ),
-        components: {
-          ThemeToggle: () => null,
-        },
       }}
     >
       {children}
