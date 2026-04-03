@@ -1,0 +1,68 @@
+---
+title: Get Video Status
+description: "GET /api/videos/:id/status — Check processing status and progress."
+---
+
+## `GET /api/videos/{id}/status`
+
+Check the processing status of a video. Poll this endpoint to track progress.
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | The video ID from the submit endpoint |
+
+### Status Flow
+
+```
+downloading → uploading → transcribing → analyzing → generating_clips → completed
+                                                                       ↘ failed
+```
+
+### Example
+
+```bash
+curl https://api.scalereach.ai/api/videos/UThwmCZb75JYZi4UP9rOX/status \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+```python
+import requests, time
+
+video_id = "UThwmCZb75JYZi4UP9rOX"
+headers = {"Authorization": "Bearer sr_live_YOUR_KEY"}
+
+while True:
+    r = requests.get(f"https://api.scalereach.ai/api/videos/{video_id}/status", headers=headers)
+    data = r.json()
+    status = data["video"]["status"]
+    progress = data.get("job", {}).get("progress", 0)
+    print(f"Status: {status} ({progress}%)")
+    if status in ("completed", "failed"):
+        break
+    time.sleep(15)
+```
+
+### Response `200`
+
+```json
+{
+  "video": {
+    "id": "UThwmCZb75JYZi4UP9rOX",
+    "status": "analyzing",
+    "title": "How Steve Jobs saved Apple from BANKRUPTCY?",
+    "duration": 1950,
+    "errorMessage": null
+  },
+  "job": {
+    "id": "video-UThwmCZb75JYZi4UP9rOX",
+    "state": "active",
+    "progress": 70
+  }
+}
+```
+
+<Callout type="info">
+Poll every 10-15 seconds. A typical 30-minute video takes 3-5 minutes to fully process.
+</Callout>

@@ -1,0 +1,67 @@
+---
+title: Authentication
+description: How to authenticate with the ScaleReach API using API keys.
+---
+
+## API Keys
+
+All API requests require a Bearer token in the `Authorization` header.
+
+```bash
+Authorization: Bearer sr_live_YOUR_API_KEY
+```
+
+API keys are scoped to a **workspace**. Any action performed with the key operates within that workspace's context (videos, clips, minutes balance, etc.).
+
+## Getting your API key
+
+1. Log in to [ScaleReach](https://app.scalereach.ai)
+2. Go to **Workspace Settings → API Keys**
+3. Click **Create API Key**
+4. Copy the key immediately — it's only shown once
+
+<Callout type="warn">
+API keys are shown only once at creation. Store it securely. If you lose it, revoke the old key and create a new one.
+</Callout>
+
+## Key format
+
+All ScaleReach API keys start with `sr_live_` followed by 48 hex characters:
+
+```
+sr_live_a3f8b2c1d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3
+```
+
+## Getting your Workspace ID
+
+You need your `workspaceId` for most API calls. Retrieve it with:
+
+```bash
+curl https://api.scalereach.ai/api/workspaces \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+Response:
+
+```json
+[
+  {
+    "id": "abc123def456",
+    "name": "My Workspace",
+    "slug": "my-workspace",
+    "plan": "pro",
+    "role": "owner"
+  }
+]
+```
+
+Use the `id` field as your `workspaceId` in subsequent requests.
+
+## Error responses
+
+| Status | Meaning |
+|--------|---------|
+| `401`  | Invalid or missing API key |
+| `403`  | Key doesn't have access to the requested resource |
+| `402`  | Insufficient minutes balance |
+| `429`  | Rate limited |

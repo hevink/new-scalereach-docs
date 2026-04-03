@@ -1,0 +1,8 @@
+{
+  "title": "Clips",
+  "description": "Retrieve and download generated clips.",
+  "pages": [
+    "list-clips",
+    "get-clip"
+  ]
+}

@@ -1,0 +1,37 @@
+---
+title: Get Workspace
+description: "GET /api/workspaces/:id — Get details of a specific workspace."
+---
+
+## `GET /api/workspaces/{id}`
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | The workspace ID |
+
+### Example
+
+```bash
+curl https://api.scalereach.ai/api/workspaces/znrje9lkcidmmaiziti \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+### Response `200`
+
+```json
+{
+  "id": "znrje9lkcidmmaiziti",
+  "name": "My Workspace",
+  "slug": "my-workspace",
+  "description": null,
+  "logo": "https://cdn.scalereach.ai/workspaces/logo.png",
+  "plan": "pro",
+  "billingCycle": "monthly",
+  "ownerId": "user_abc123",
+  "role": "owner",
+  "createdAt": "2026-01-21T18:41:34.819Z",
+  "updatedAt": "2026-03-12T09:49:24.046Z"
+}
+```

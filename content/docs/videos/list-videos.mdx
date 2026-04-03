@@ -1,0 +1,35 @@
+---
+title: List Videos
+description: "GET /api/videos/my-videos — List all videos in a workspace."
+---
+
+## `GET /api/videos/my-videos`
+
+### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `workspaceId` | string | ✅ | The workspace ID |
+
+### Example
+
+```bash
+curl "https://api.scalereach.ai/api/videos/my-videos?workspaceId=abc123" \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+### Response `200`
+
+```json
+[
+  {
+    "id": "UThwmCZb75JYZi4UP9rOX",
+    "title": "How Steve Jobs saved Apple from BANKRUPTCY?",
+    "status": "completed",
+    "sourceType": "youtube",
+    "sourceUrl": "https://www.youtube.com/watch?v=wVXAFlueS9Y",
+    "duration": 1950,
+    "createdAt": "2026-04-03T09:41:50.622Z"
+  }
+]
+```

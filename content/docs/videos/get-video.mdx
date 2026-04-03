@@ -1,0 +1,36 @@
+---
+title: Get Video
+description: "GET /api/videos/:id — Get full details of a specific video."
+---
+
+## `GET /api/videos/{id}`
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | The video ID |
+
+### Example
+
+```bash
+curl https://api.scalereach.ai/api/videos/UThwmCZb75JYZi4UP9rOX \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+### Response `200`
+
+```json
+{
+  "id": "UThwmCZb75JYZi4UP9rOX",
+  "title": "How Steve Jobs saved Apple from BANKRUPTCY?",
+  "status": "completed",
+  "sourceType": "youtube",
+  "sourceUrl": "https://www.youtube.com/watch?v=wVXAFlueS9Y",
+  "duration": 1950,
+  "transcript": "The year is 1997 and Apple is dying...",
+  "transcriptLanguage": "en",
+  "workspaceId": "znrje9lkcidmmaiziti",
+  "createdAt": "2026-04-03T09:41:50.622Z"
+}
+```

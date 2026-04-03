@@ -1,0 +1,11 @@
+{
+  "title": "Videos",
+  "description": "Submit, track, and manage video processing.",
+  "pages": [
+    "submit-youtube",
+    "get-status",
+    "list-videos",
+    "get-video",
+    "delete-video"
+  ]
+}

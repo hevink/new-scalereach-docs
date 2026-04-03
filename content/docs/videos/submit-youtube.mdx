@@ -1,0 +1,134 @@
+---
+title: Submit YouTube Video
+description: "POST /api/videos/youtube — Submit a YouTube URL for processing."
+---
+
+## `POST /api/videos/youtube`
+
+Submit a YouTube URL for processing. The video will be downloaded, transcribed, analyzed for viral moments, and clips will be generated automatically.
+
+### Request Body
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `youtubeUrl` | string | ✅ | Full YouTube URL |
+| `workspaceId` | string | ✅ | Workspace ID from `GET /api/workspaces` |
+| `config` | object | — | Processing config (see below). If omitted, video is created with `pending_config` status. |
+| `projectId` | string | — | Optional project ID to organize under |
+
+### Config Object
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `clipType` | string | `"viral-clips"` | `viral-clips` or `split-clips` |
+| `clipModel` | string | `"ClipBasic"` | `ClipBasic` or `ClipPro` |
+| `genre` | string | `"Auto"` | `Auto`, `Podcast`, `Gaming`, `Education`, `Entertainment` |
+| `clipDurationMin` | number | `15` | Minimum clip duration (seconds) |
+| `clipDurationMax` | number | `90` | Maximum clip duration (seconds) |
+| `aspectRatio` | string | `"9:16"` | `9:16`, `16:9`, or `1:1` |
+| `enableCaptions` | boolean | `false` | Auto-generate captions on clips |
+| `enableAutoHook` | boolean | `true` | AI-generated hook titles |
+| `captionTemplateId` | string | `"karaoke"` | Caption style: `karaoke`, `word-by-word`, `sentence` |
+| `language` | string | `null` | ISO code (e.g. `en`, `hi`, `es`). `null` = auto-detect |
+| `timeframeStart` | number | `0` | Start time in seconds (skip intros) |
+| `timeframeEnd` | number | `null` | End time in seconds. `null` = full duration |
+| `enableSplitScreen` | boolean | `false` | Enable split-screen with background video |
+| `splitScreenBgVideoId` | string | `null` | Background video ID for split-screen |
+| `splitScreenBgCategoryId` | string | `null` | Background category ID for split-screen |
+| `splitRatio` | number | `50` | Split-screen ratio (percentage for main video) |
+| `enableSmartCrop` | boolean | `false` | AI face-tracking smart crop |
+| `enableWatermark` | boolean | `true` | Add watermark to clips |
+| `skipClipping` | boolean | `false` | Skip clip generation (transcribe only) |
+| `customPrompt` | string | — | Custom instructions for AI clip detection |
+
+### Example
+
+```bash
+curl -X POST https://api.scalereach.ai/api/videos/youtube \
+  -H "Authorization: Bearer sr_live_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "workspaceId": "abc123",
+    "config": {
+      "clipType": "viral-clips",
+      "clipModel": "ClipBasic",
+      "genre": "Auto",
+      "clipDurationMin": 15,
+      "clipDurationMax": 90,
+      "aspectRatio": "9:16",
+      "enableCaptions": true,
+      "enableAutoHook": true,
+      "captionTemplateId": "karaoke"
+    }
+  }'
+```
+
+```python
+import requests
+
+response = requests.post(
+    "https://api.scalereach.ai/api/videos/youtube",
+    headers={"Authorization": "Bearer sr_live_YOUR_KEY"},
+    json={
+        "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "workspaceId": "abc123",
+        "config": {
+            "clipType": "viral-clips",
+            "clipModel": "ClipBasic",
+            "genre": "Auto",
+            "aspectRatio": "9:16",
+            "enableCaptions": True,
+            "enableAutoHook": True,
+        },
+    },
+)
+video_id = response.json()["video"]["id"]
+```
+
+```javascript
+const response = await fetch("https://api.scalereach.ai/api/videos/youtube", {
+  method: "POST",
+  headers: {
+    Authorization: "Bearer sr_live_YOUR_KEY",
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    workspaceId: "abc123",
+    config: {
+      clipType: "viral-clips",
+      clipModel: "ClipBasic",
+      genre: "Auto",
+      aspectRatio: "9:16",
+      enableCaptions: true,
+      enableAutoHook: true,
+    },
+  }),
+});
+const { video } = await response.json();
+```
+
+### Response `201`
+
+```json
+{
+  "message": "Video submitted for processing",
+  "video": {
+    "id": "UThwmCZb75JYZi4UP9rOX",
+    "title": "How Steve Jobs saved Apple from BANKRUPTCY?",
+    "status": "downloading",
+    "sourceType": "youtube",
+    "sourceUrl": "https://www.youtube.com/watch?v=wVXAFlueS9Y",
+    "workspaceId": "znrje9lkcidmmaiziti",
+    "createdAt": "2026-04-03T09:41:50.622Z"
+  },
+  "videoInfo": {
+    "id": "wVXAFlueS9Y",
+    "title": "How Steve Jobs saved Apple from BANKRUPTCY?",
+    "duration": 1950,
+    "thumbnail": "https://i.ytimg.com/vi/wVXAFlueS9Y/maxresdefault.jpg",
+    "channelName": "Think School"
+  }
+}
+```

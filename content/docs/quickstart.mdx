@@ -1,0 +1,186 @@
+---
+title: Quickstart
+description: Generate your first viral clips in under 5 minutes.
+---
+
+## Prerequisites
+
+- A ScaleReach account with an active plan (minutes balance > 0)
+- An API key ([get one here](/docs/authentication))
+
+## Step 1: Get your workspace ID
+
+```bash
+curl https://api.scalereach.ai/api/workspaces \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+Copy the `id` from the first workspace in the response.
+
+## Step 2: Submit a YouTube video
+
+```bash
+curl -X POST https://api.scalereach.ai/api/videos/youtube \
+  -H "Authorization: Bearer sr_live_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "youtubeUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
+    "workspaceId": "YOUR_WORKSPACE_ID",
+    "config": {
+      "clipType": "viral-clips",
+      "clipDurationMin": 15,
+      "clipDurationMax": 90,
+      "aspectRatio": "9:16",
+      "enableCaptions": true,
+      "enableAutoHook": true,
+      "genre": "Auto",
+      "clipModel": "ClipBasic"
+    }
+  }'
+```
+
+<Callout type="info">
+Minutes are deducted immediately based on video duration. A 30-minute video costs ~30 minutes.
+</Callout>
+
+Save the `video.id` from the response.
+
+## Step 3: Poll for completion
+
+```bash
+curl https://api.scalereach.ai/api/videos/VIDEO_ID/status \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+The video goes through these stages:
+
+| Status | Description |
+|--------|-------------|
+| `downloading` | Downloading from YouTube |
+| `uploading` | Uploading to cloud storage |
+| `transcribing` | AI speech-to-text |
+| `analyzing` | AI detecting viral moments |
+| `generating_clips` | Cutting and rendering clips |
+| `completed` | All clips ready |
+| `failed` | Something went wrong (check `errorMessage`) |
+
+<Callout type="info">
+Poll every 10-15 seconds. A typical 30-minute video takes 3-5 minutes to fully process.
+</Callout>
+
+## Step 4: Get your clips
+
+Once status is `completed`:
+
+```bash
+curl https://api.scalereach.ai/api/videos/VIDEO_ID/clips \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+Response:
+
+```json
+{
+  "videoId": "VIDEO_ID",
+  "clips": [
+    {
+      "id": "clip_abc123",
+      "title": "The moment everything changed",
+      "startTime": 245,
+      "endTime": 302,
+      "duration": 57,
+      "score": 92,
+      "viralityReason": "Strong emotional hook with unexpected twist",
+      "transcript": "And that's when I realized...",
+      "downloadUrl": "https://cdn.scalereach.ai/signed-url...",
+      "thumbnailUrl": "https://cdn.scalereach.ai/thumb...",
+      "status": "completed",
+      "aspectRatio": "9:16"
+    }
+  ],
+  "count": 8
+}
+```
+
+Each clip has a `downloadUrl` (signed, expires in 1 hour) you can download directly.
+
+## Full script
+
+```bash
+#!/bin/bash
+API_KEY="sr_live_YOUR_KEY"
+BASE="https://api.scalereach.ai"
+
+# 1. Get workspace ID
+WORKSPACE_ID=$(curl -s "$BASE/api/workspaces" \
+  -H "Authorization: Bearer $API_KEY" \
+  | python3 -c "import sys,json; print(json.load(sys.stdin)[0]['id'])")
+echo "Workspace: $WORKSPACE_ID"
+
+# 2. Submit video
+VIDEO_ID=$(curl -s -X POST "$BASE/api/videos/youtube" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"youtubeUrl\": \"https://www.youtube.com/watch?v=VIDEO_ID\",
+    \"workspaceId\": \"$WORKSPACE_ID\",
+    \"config\": {
+      \"clipType\": \"viral-clips\",
+      \"aspectRatio\": \"9:16\",
+      \"enableCaptions\": true
+    }
+  }" | python3 -c "import sys,json; print(json.load(sys.stdin)['video']['id'])")
+echo "Video ID: $VIDEO_ID"
+
+# 3. Poll until completed
+while true; do
+  STATUS=$(curl -s "$BASE/api/videos/$VIDEO_ID/status" \
+    -H "Authorization: Bearer $API_KEY" \
+    | python3 -c "import sys,json; print(json.load(sys.stdin)['video']['status'])")
+  echo "Status: $STATUS"
+  if [ "$STATUS" = "completed" ] || [ "$STATUS" = "failed" ]; then break; fi
+  sleep 15
+done
+
+# 4. Get clips
+curl -s "$BASE/api/videos/$VIDEO_ID/clips" \
+  -H "Authorization: Bearer $API_KEY" | python3 -m json.tool
+```
+
+## Python example
+
+```python
+import requests
+import time
+
+API_KEY = "sr_live_YOUR_KEY"
+BASE = "https://api.scalereach.ai"
+HEADERS = {"Authorization": f"Bearer {API_KEY}"}
+
+# 1. Get workspace
+workspaces = requests.get(f"{BASE}/api/workspaces", headers=HEADERS).json()
+workspace_id = workspaces[0]["id"]
+
+# 2. Submit video
+resp = requests.post(f"{BASE}/api/videos/youtube", headers=HEADERS, json={
+    "youtubeUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
+    "workspaceId": workspace_id,
+    "config": {"clipType": "viral-clips", "aspectRatio": "9:16", "enableCaptions": True},
+})
+video_id = resp.json()["video"]["id"]
+print(f"Video submitted: {video_id}")
+
+# 3. Poll
+while True:
+    status = requests.get(f"{BASE}/api/videos/{video_id}/status", headers=HEADERS).json()
+    s = status["video"]["status"]
+    print(f"Status: {s} ({status.get('job', {}).get('progress', 0)}%)")
+    if s in ("completed", "failed"):
+        break
+    time.sleep(15)
+
+# 4. Get clips
+clips = requests.get(f"{BASE}/api/videos/{video_id}/clips", headers=HEADERS).json()
+for clip in clips["clips"]:
+    print(f"[{clip['score']}] {clip['title']} — {clip['downloadUrl']}")
+```

@@ -1,0 +1,45 @@
+---
+title: List Workspaces
+description: "GET /api/workspaces — List all workspaces accessible with your API key."
+---
+
+## `GET /api/workspaces`
+
+Returns all workspaces the API key owner has access to.
+
+### Example
+
+```bash
+curl https://api.scalereach.ai/api/workspaces \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+```python
+import requests
+
+response = requests.get(
+    "https://api.scalereach.ai/api/workspaces",
+    headers={"Authorization": "Bearer sr_live_YOUR_KEY"},
+)
+workspaces = response.json()
+workspace_id = workspaces[0]["id"]  # Use this for other API calls
+```
+
+### Response `200`
+
+```json
+[
+  {
+    "id": "znrje9lkcidmmaiziti",
+    "name": "My Workspace",
+    "slug": "my-workspace",
+    "description": null,
+    "logo": "https://cdn.scalereach.ai/workspaces/logo.png",
+    "plan": "pro",
+    "billingCycle": "monthly",
+    "role": "owner",
+    "createdAt": "2026-01-21T18:41:34.819Z",
+    "updatedAt": "2026-03-12T09:49:24.046Z"
+  }
+]
+```

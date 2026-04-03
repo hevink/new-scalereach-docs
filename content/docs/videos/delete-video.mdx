@@ -1,0 +1,29 @@
+---
+title: Delete Video
+description: "DELETE /api/videos/:id — Delete a video and all its clips."
+---
+
+## `DELETE /api/videos/{id}`
+
+Permanently deletes the video, all its clips, and all associated files. This cannot be undone.
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | The video ID to delete |
+
+### Example
+
+```bash
+curl -X DELETE https://api.scalereach.ai/api/videos/UThwmCZb75JYZi4UP9rOX \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+### Response `200`
+
+```json
+{
+  "message": "Video deleted successfully"
+}
+```

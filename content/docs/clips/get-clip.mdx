@@ -1,0 +1,41 @@
+---
+title: Get Clip
+description: "GET /api/clips/:id — Get full details of a specific clip."
+---
+
+## `GET /api/clips/{id}`
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | The clip ID |
+
+### Example
+
+```bash
+curl https://api.scalereach.ai/api/clips/clip_abc123 \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+### Response `200`
+
+```json
+{
+  "id": "clip_abc123",
+  "videoId": "UThwmCZb75JYZi4UP9rOX",
+  "title": "The moment Steve Jobs changed everything",
+  "startTime": 245,
+  "endTime": 302,
+  "duration": 57,
+  "score": 92,
+  "viralityReason": "Strong emotional hook with unexpected twist",
+  "transcript": "And that's when I realized...",
+  "downloadUrl": "https://cdn.scalereach.ai/clips/clip_abc123.mp4?signature=...",
+  "thumbnailUrl": "https://cdn.scalereach.ai/thumbs/clip_abc123.jpg?signature=...",
+  "status": "completed",
+  "aspectRatio": "9:16",
+  "favorited": false,
+  "createdAt": "2026-04-03T09:45:12.000Z"
+}
+```

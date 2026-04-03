@@ -1,0 +1,104 @@
+---
+title: List Video Clips
+description: "GET /api/videos/:id/clips — Get all generated clips with download URLs."
+---
+
+## `GET /api/videos/{id}/clips`
+
+Get all generated clips for a video, with signed download URLs.
+
+<Callout type="info">
+There is no separate "clip status" endpoint. Clips are generated as part of the video processing pipeline. Poll `GET /api/videos/:id/status` until the video reaches `completed`, then call this endpoint — all clips will be ready with `downloadUrl` included.
+</Callout>
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | The video ID |
+
+### Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `minScore` | number | — | Minimum virality score (0-100) |
+| `maxScore` | number | — | Maximum virality score (0-100) |
+| `status` | string | — | Filter: `detected`, `generating`, `completed`, `failed` |
+| `favorited` | boolean | — | Filter favorited clips only |
+| `sortBy` | string | `score` | `score` or `duration` |
+| `sortOrder` | string | `desc` | `asc` or `desc` |
+
+### Example
+
+```bash
+curl "https://api.scalereach.ai/api/videos/VIDEO_ID/clips?minScore=80&sortBy=score" \
+  -H "Authorization: Bearer sr_live_YOUR_KEY"
+```
+
+```python
+import requests
+
+response = requests.get(
+    f"https://api.scalereach.ai/api/videos/{video_id}/clips",
+    params={"minScore": 80, "sortBy": "score"},
+    headers={"Authorization": "Bearer sr_live_YOUR_KEY"},
+)
+data = response.json()
+for clip in data["clips"]:
+    print(f"[{clip['score']}] {clip['title']} — {clip['downloadUrl']}")
+```
+
+### Response `200`
+
+```json
+{
+  "videoId": "UThwmCZb75JYZi4UP9rOX",
+  "clips": [
+    {
+      "id": "clip_abc123",
+      "title": "The moment Steve Jobs changed everything",
+      "startTime": 245,
+      "endTime": 302,
+      "duration": 57,
+      "score": 92,
+      "viralityReason": "Strong emotional hook with unexpected twist",
+      "transcript": "And that's when I realized that Apple wasn't just a company...",
+      "downloadUrl": "https://cdn.scalereach.ai/clips/clip_abc123.mp4?signature=...",
+      "thumbnailUrl": "https://cdn.scalereach.ai/thumbs/clip_abc123.jpg?signature=...",
+      "status": "completed",
+      "aspectRatio": "9:16",
+      "favorited": false,
+      "hooks": {
+        "question": "What saved Apple from bankruptcy?",
+        "statement": "This one decision saved Apple forever"
+      }
+    }
+  ],
+  "count": 8,
+  "filters": {
+    "minScore": 80,
+    "sortBy": "score",
+    "sortOrder": "desc"
+  }
+}
+```
+
+### Clip Object Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique clip ID |
+| `title` | string | AI-generated clip title |
+| `startTime` | number | Start time in seconds |
+| `endTime` | number | End time in seconds |
+| `duration` | number | Clip duration in seconds |
+| `score` | number | Virality score (0-100) |
+| `viralityReason` | string | AI explanation of why this moment is viral |
+| `transcript` | string | Transcript text for this segment |
+| `downloadUrl` | string | Signed URL (expires in 1 hour) |
+| `thumbnailUrl` | string | Signed thumbnail URL |
+| `status` | string | `detected`, `generating`, `completed`, `failed` |
+| `aspectRatio` | string | `9:16`, `16:9`, or `1:1` |
+| `hooks` | object | AI-generated hook suggestions |
+| `emotions` | object | Detected emotions |
+| `favorited` | boolean | Whether the clip is favorited |
