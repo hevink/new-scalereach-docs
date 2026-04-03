@@ -8,16 +8,9 @@ description: Generate your first viral clips in under 5 minutes.
 - A ScaleReach account with an active plan (minutes balance > 0)
 - An API key ([get one here](/docs/authentication))
 
-## Step 1: Get your workspace ID
+## Step 1: Submit a YouTube video
 
-```bash
-curl https://api.scalereach.ai/api/workspaces \
-  -H "Authorization: Bearer sr_live_YOUR_KEY"
-```
-
-Copy the `id` from the first workspace in the response.
-
-## Step 2: Submit a YouTube video
+With an API key, the workspace is auto-resolved — you don't need to fetch it separately.
 
 ```bash
 curl -X POST https://api.scalereach.ai/api/videos/youtube \
@@ -25,7 +18,6 @@ curl -X POST https://api.scalereach.ai/api/videos/youtube \
   -H "Content-Type: application/json" \
   -d '{
     "youtubeUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
-    "workspaceId": "YOUR_WORKSPACE_ID",
     "config": {
       "clipType": "viral-clips",
       "clipDurationMin": 15,
@@ -45,7 +37,7 @@ Minutes are deducted immediately based on video duration. A 30-minute video cost
 
 Save the `video.id` from the response.
 
-## Step 3: Poll for completion
+## Step 2: Poll for completion
 
 ```bash
 curl https://api.scalereach.ai/api/videos/VIDEO_ID/status \
@@ -68,7 +60,7 @@ The video goes through these stages:
 Poll every 10-15 seconds. A typical 30-minute video takes 3-5 minutes to fully process.
 </Callout>
 
-## Step 4: Get your clips
+## Step 3: Get your clips
 
 Once status is `completed`:
 

@@ -12,7 +12,7 @@ Submit a YouTube URL for processing. The video will be downloaded, transcribed, 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `youtubeUrl` | string | ✅ | Full YouTube URL |
-| `workspaceId` | string | ✅ | Workspace ID from `GET /api/workspaces` |
+| `workspaceId` | string | — | Workspace ID. **Optional when using an API key** — auto-resolved from the key. Required for session auth. |
 | `config` | object | — | Processing config (see below). If omitted, video is created with `pending_config` status. |
 | `projectId` | string | — | Optional project ID to organize under |
 

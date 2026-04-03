@@ -5,7 +5,7 @@ description: Copy-paste this prompt into Claude, ChatGPT, or any AI to generate 
 
 ## Ready-to-use prompt
 
-Copy the prompt below, replace the placeholders, and paste it into any AI assistant (Claude, ChatGPT, etc.):
+Copy the prompt below, replace the placeholders, and paste it into any AI assistant (Claude, ChatGPT, Kiro, Cursor, etc.):
 
 ```text
 Use the ScaleReach API docs (https://docs.scalereach.ai/llms-full.txt) to generate viral short-form clips from this YouTube video:
@@ -16,29 +16,30 @@ My API key: sr_live_[YOUR_KEY_HERE]
 API base URL: https://api.scalereach.ai
 
 Steps:
-1. First, call GET /api/workspaces with my API key to get my workspace ID
-2. Then, call POST /api/videos/youtube with the YouTube URL, workspace ID, and this config:
+1. Call POST /api/videos/youtube with the YouTube URL and this config (workspaceId is auto-resolved from the API key):
    - clipType: "viral-clips"
    - aspectRatio: "9:16"
    - enableCaptions: true
    - enableAutoHook: true
    - clipDurationMin: 15
    - clipDurationMax: 90
-3. Poll GET /api/videos/{id}/status every 15 seconds until status is "completed"
-4. Once completed, call GET /api/videos/{id}/clips to get all the generated clips
-5. Show me each clip's title, virality score, duration, and download URL
+2. Poll GET /api/videos/{id}/status every 15 seconds until status is "completed"
+3. Once completed, call GET /api/videos/{id}/clips to get all the generated clips
+4. Show me each clip's title, virality score, duration, and download URL
 
 Use curl commands to make the API calls. Show me the results.
 ```
+
+<Callout type="info">
+The workspace ID is automatically resolved from your API key — no need to fetch it separately.
+</Callout>
 
 ## Example prompts
 
 ### Basic — just generate clips
 
 ```text
-Use the ScaleReach API (docs: https://docs.scalereach.ai/llms-full.txt) and my API key sr_live_abc123... to generate viral clips from https://www.youtube.com/watch?v=VIDEO_ID
-
-Use 9:16 aspect ratio with captions enabled. Show me the clips when done.
+ScaleReach API docs: https://docs.scalereach.ai/llms-full.txt | Key: sr_live_YOUR_KEY | Generate clips from https://www.youtube.com/watch?v=VIDEO_ID with 9:16 captions enabled, poll until done, show results.
 ```
 
 ### With specific preferences
@@ -46,7 +47,7 @@ Use 9:16 aspect ratio with captions enabled. Show me the clips when done.
 ```text
 Read https://docs.scalereach.ai/llms-full.txt for the ScaleReach API reference.
 
-My API key: sr_live_abc123...
+My API key: sr_live_YOUR_KEY
 
 Generate clips from this video: https://www.youtube.com/watch?v=VIDEO_ID
 
@@ -55,13 +56,10 @@ Config:
 - Enable captions
 - Clip duration: 30-60 seconds
 - Genre: Education
-- Focus on the most emotional/surprising moments
 
 Poll until done, then show me all clips sorted by virality score with download links.
 ```
 
-### Minimal one-liner
-
-```text
-ScaleReach API docs: https://docs.scalereach.ai/llms-full.txt | Key: sr_live_abc123... | Generate clips from https://youtube.com/watch?v=VIDEO_ID with 9:16 captions enabled, poll until done, show results.
-```
+<Callout type="warn">
+Claude.ai and ChatGPT web cannot make outbound API calls. Use this prompt in tools with shell access like Kiro, Claude Code, or Cursor — or run the generated script locally.
+</Callout>
