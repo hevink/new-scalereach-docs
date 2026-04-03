@@ -9,10 +9,13 @@ export default function Layout({ children }: LayoutProps<'/docs'>) {
       {...baseOptions()}
       sidebar={{
         footer: (
-          <div className="flex flex-col gap-1 text-xs text-fd-muted-foreground px-2 pb-2">
-            <span>© {new Date().getFullYear()} ScaleReach</span>
+          <div className="text-xs text-fd-muted-foreground px-2 pb-2">
+            © {new Date().getFullYear()} ScaleReach
           </div>
         ),
+        components: {
+          ThemeToggle: () => null,
+        },
       }}
     >
       {children}
