@@ -1,65 +1,45 @@
 ---
 title: AI Prompt Template
-description: Copy-paste this prompt into Claude, ChatGPT, or any AI to generate clips via the ScaleReach API.
+description: Copy-paste this prompt into any AI to generate clips via the ScaleReach API.
 ---
 
-## Ready-to-use prompt
+## For AI tools with shell access (Kiro, Claude Code, Cursor)
 
-Copy the prompt below, replace the placeholders, and paste it into any AI assistant (Claude, ChatGPT, Kiro, Cursor, etc.):
-
-```text
-Use the ScaleReach API docs (https://docs.scalereach.ai/llms-full.txt) to generate viral short-form clips from this YouTube video:
-
-YouTube URL: [PASTE_YOUTUBE_URL_HERE]
-
-My API key: sr_live_[YOUR_KEY_HERE]
-API base URL: https://api.scalereach.ai
-
-Steps:
-1. Call POST /api/videos/youtube with the YouTube URL and this config (workspaceId is auto-resolved from the API key):
-   - clipType: "viral-clips"
-   - aspectRatio: "9:16"
-   - enableCaptions: true
-   - enableAutoHook: true
-   - clipDurationMin: 15
-   - clipDurationMax: 90
-2. Poll GET /api/videos/{id}/status every 15 seconds until status is "completed"
-3. Once completed, call GET /api/videos/{id}/clips to get all the generated clips
-4. Show me each clip's title, virality score, duration, and download URL
-
-Use curl commands to make the API calls. Show me the results.
-```
-
-<Callout type="info">
-The workspace ID is automatically resolved from your API key — no need to fetch it separately.
-</Callout>
-
-## Example prompts
-
-### Basic — just generate clips
+These tools can execute the API calls directly:
 
 ```text
 ScaleReach API docs: https://docs.scalereach.ai/llms-full.txt | Key: sr_live_YOUR_KEY | Generate clips from https://www.youtube.com/watch?v=VIDEO_ID with 9:16 captions enabled, poll until done, show results.
 ```
 
-### With specific preferences
+## For web-based AIs (Claude.ai, ChatGPT, Gemini)
+
+These AIs can't make external API calls. Use this prompt instead — the AI will generate a ready-to-run script:
 
 ```text
-Read https://docs.scalereach.ai/llms-full.txt for the ScaleReach API reference.
+Read the ScaleReach API docs at https://docs.scalereach.ai/llms-full.txt
 
 My API key: sr_live_YOUR_KEY
 
-Generate clips from this video: https://www.youtube.com/watch?v=VIDEO_ID
+Generate a bash script that:
+1. Submits this YouTube video for clip generation: https://www.youtube.com/watch?v=VIDEO_ID
+2. Polls until processing is complete
+3. Prints all clips with titles, scores, and download URLs
 
-Config:
-- Aspect ratio: 9:16 (vertical for TikTok/Reels)
-- Enable captions
-- Clip duration: 30-60 seconds
-- Genre: Education
+Config: 9:16 aspect ratio, captions enabled, 15-90 second clips.
 
-Poll until done, then show me all clips sorted by virality score with download links.
+Note: workspaceId is auto-resolved from the API key — no need to fetch it.
+
+After generating the script, tell me to check my clips at https://app.scalereach.ai once processing is done.
 ```
 
-<Callout type="warn">
-Claude.ai and ChatGPT web cannot make outbound API calls. Use this prompt in tools with shell access like Kiro, Claude Code, or Cursor — or run the generated script locally.
+<Callout type="info">
+Claude.ai, ChatGPT, and Gemini web cannot make API calls directly. They will generate a script you can run in your terminal, or you can check your clips at [app.scalereach.ai](https://app.scalereach.ai) once processing completes.
 </Callout>
+
+## Where to see your clips
+
+After submitting a video (via script or any method), your clips will appear in the ScaleReach dashboard:
+
+**[app.scalereach.ai](https://app.scalereach.ai)** → Select your workspace → Videos → Click the video → View all generated clips
+
+No need to poll from the terminal — the dashboard shows real-time progress and lets you preview, download, and edit clips directly.
