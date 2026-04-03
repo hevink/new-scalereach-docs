@@ -1,0 +1,67 @@
+---
+title: AI Prompt Template
+description: Copy-paste this prompt into Claude, ChatGPT, or any AI to generate clips via the ScaleReach API.
+---
+
+## Ready-to-use prompt
+
+Copy the prompt below, replace the placeholders, and paste it into any AI assistant (Claude, ChatGPT, etc.):
+
+```text
+Use the ScaleReach API docs (https://docs.scalereach.ai/llms-full.txt) to generate viral short-form clips from this YouTube video:
+
+YouTube URL: [PASTE_YOUTUBE_URL_HERE]
+
+My API key: sr_live_[YOUR_KEY_HERE]
+API base URL: https://api.scalereach.ai
+
+Steps:
+1. First, call GET /api/workspaces with my API key to get my workspace ID
+2. Then, call POST /api/videos/youtube with the YouTube URL, workspace ID, and this config:
+   - clipType: "viral-clips"
+   - aspectRatio: "9:16"
+   - enableCaptions: true
+   - enableAutoHook: true
+   - clipDurationMin: 15
+   - clipDurationMax: 90
+3. Poll GET /api/videos/{id}/status every 15 seconds until status is "completed"
+4. Once completed, call GET /api/videos/{id}/clips to get all the generated clips
+5. Show me each clip's title, virality score, duration, and download URL
+
+Use curl commands to make the API calls. Show me the results.
+```
+
+## Example prompts
+
+### Basic — just generate clips
+
+```text
+Use the ScaleReach API (docs: https://docs.scalereach.ai/llms-full.txt) and my API key sr_live_abc123... to generate viral clips from https://www.youtube.com/watch?v=VIDEO_ID
+
+Use 9:16 aspect ratio with captions enabled. Show me the clips when done.
+```
+
+### With specific preferences
+
+```text
+Read https://docs.scalereach.ai/llms-full.txt for the ScaleReach API reference.
+
+My API key: sr_live_abc123...
+
+Generate clips from this video: https://www.youtube.com/watch?v=VIDEO_ID
+
+Config:
+- Aspect ratio: 9:16 (vertical for TikTok/Reels)
+- Enable captions
+- Clip duration: 30-60 seconds
+- Genre: Education
+- Focus on the most emotional/surprising moments
+
+Poll until done, then show me all clips sorted by virality score with download links.
+```
+
+### Minimal one-liner
+
+```text
+ScaleReach API docs: https://docs.scalereach.ai/llms-full.txt | Key: sr_live_abc123... | Generate clips from https://youtube.com/watch?v=VIDEO_ID with 9:16 captions enabled, poll until done, show results.
+```
