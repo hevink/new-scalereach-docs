@@ -10,7 +10,7 @@ description: Generate your first viral clips in under 5 minutes.
 
 ## Step 1: Submit a YouTube video
 
-With an API key, the workspace is auto-resolved — you don't need to fetch it separately.
+With an API key, the workspace is auto-resolved - you don't need to fetch it separately.
 
 ```bash
 curl -X POST https://api.scalereach.ai/api/videos/youtube \
@@ -174,5 +174,5 @@ while True:
 # 4. Get clips
 clips = requests.get(f"{BASE}/api/videos/{video_id}/clips", headers=HEADERS).json()
 for clip in clips["clips"]:
-    print(f"[{clip['score']}] {clip['title']} — {clip['downloadUrl']}")
+    print(f"[{clip['score']}] {clip['title']} - {clip['downloadUrl']}")
 ```

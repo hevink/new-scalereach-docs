@@ -1,6 +1,6 @@
 ---
 title: List Video Clips
-description: "GET /api/videos/:id/clips — Get all generated clips with download URLs."
+description: "GET /api/videos/:id/clips - Get all generated clips with download URLs."
 ---
 
 ## `GET /api/videos/{id}/clips`
@@ -8,7 +8,7 @@ description: "GET /api/videos/:id/clips — Get all generated clips with downloa
 Get all generated clips for a video, with signed download URLs.
 
 <Callout type="info">
-There is no separate "clip status" endpoint. Clips are generated as part of the video processing pipeline. Poll `GET /api/videos/:id/status` until the video reaches `completed`, then call this endpoint — all clips will be ready with `downloadUrl` included.
+There is no separate "clip status" endpoint. Clips are generated as part of the video processing pipeline. Poll `GET /api/videos/:id/status` until the video reaches `completed`, then call this endpoint - all clips will be ready with `downloadUrl` included.
 </Callout>
 
 ### Path Parameters
@@ -21,10 +21,10 @@ There is no separate "clip status" endpoint. Clips are generated as part of the 
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `minScore` | number | — | Minimum virality score (0-100) |
-| `maxScore` | number | — | Maximum virality score (0-100) |
-| `status` | string | — | Filter: `detected`, `generating`, `completed`, `failed` |
-| `favorited` | boolean | — | Filter favorited clips only |
+| `minScore` | number | - | Minimum virality score (0-100) |
+| `maxScore` | number | - | Maximum virality score (0-100) |
+| `status` | string | - | Filter: `detected`, `generating`, `completed`, `failed` |
+| `favorited` | boolean | - | Filter favorited clips only |
 | `sortBy` | string | `score` | `score` or `duration` |
 | `sortOrder` | string | `desc` | `asc` or `desc` |
 
@@ -45,7 +45,7 @@ response = requests.get(
 )
 data = response.json()
 for clip in data["clips"]:
-    print(f"[{clip['score']}] {clip['title']} — {clip['downloadUrl']}")
+    print(f"[{clip['score']}] {clip['title']} - {clip['downloadUrl']}")
 ```
 
 ### Response `200`

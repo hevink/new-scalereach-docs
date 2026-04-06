@@ -5,7 +5,7 @@ description: Turn any YouTube video into viral short-form clips with the ScaleRe
 
 ## What is ScaleReach?
 
-ScaleReach is an AI-powered platform that takes long-form YouTube videos and automatically generates viral short-form clips — ready for TikTok, Reels, and Shorts.
+ScaleReach is an AI-powered platform that takes long-form YouTube videos and automatically generates viral short-form clips - ready for TikTok, Reels, and Shorts.
 
 The API lets you do everything programmatically:
 
@@ -22,10 +22,10 @@ https://api.scalereach.ai
 
 ## How it works
 
-1. **Get your API key** — Go to Workspace Settings → API Keys in the ScaleReach dashboard and create a key.
-2. **Submit a YouTube video** — `POST /api/videos/youtube` with the URL and your workspace ID. Processing starts automatically.
-3. **Poll for status** — `GET /api/videos/:id/status` — watch it go from `downloading` → `transcribing` → `analyzing` → `completed`.
-4. **Get your clips** — `GET /api/videos/:id/clips` — returns all detected viral clips with scores, transcripts, and signed download URLs.
+1. **Get your API key** - Go to Workspace Settings → API Keys in the ScaleReach dashboard and create a key.
+2. **Submit a YouTube video** - `POST /api/videos/youtube` with the URL and your workspace ID. Processing starts automatically.
+3. **Poll for status** - `GET /api/videos/:id/status` - watch it go from `downloading` → `transcribing` → `analyzing` → `completed`.
+4. **Get your clips** - `GET /api/videos/:id/clips` - returns all detected viral clips with scores, transcripts, and signed download URLs.
 
 ## Quick example
 
@@ -43,7 +43,7 @@ curl -X POST https://api.scalereach.ai/api/videos/youtube \
   }'
 ```
 
-The response includes a `video.id` — use that to check status and retrieve clips.
+The response includes a `video.id` - use that to check status and retrieve clips.
 
 <Cards>
   <Card title="Authentication" href="/docs/authentication">
