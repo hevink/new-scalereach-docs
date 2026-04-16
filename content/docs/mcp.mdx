@@ -26,12 +26,13 @@ Choose the option that works for you:
 
 Works directly in your browser at [claude.ai](https://claude.ai). No terminal, no downloads.
 
-1. Go to [claude.ai](https://claude.ai) → **Settings** → **Connectors** → **Add**
-2. Enter the URL: `https://mcp.scalereach.ai/mcp`
-3. Add a header: `Authorization` with value `Bearer sr_live_YOUR_KEY_HERE`
-4. Save and start chatting
+1. Go to [claude.ai](https://claude.ai) → **Settings** → **Connectors** → **Add custom connector**
+2. **Name**: `ScaleReach`
+3. **Remote MCP server URL**: `https://mcp.scalereach.ai/mcp/sr_live_YOUR_KEY_HERE`
+4. Leave OAuth fields empty
+5. Click **Add**
 
-That's it. No Node.js, no config files, no terminal.
+Replace `sr_live_YOUR_KEY_HERE` with your actual API key. Your key is embedded in the URL — that's how Claude authenticates with ScaleReach.
 
 <Callout type="info">
 This also works with the Claude Chrome extension.
