@@ -27,7 +27,7 @@ Submit a YouTube URL for processing. The video will be downloaded, transcribed, 
 | `clipDurationMax` | number | `90` | Maximum clip duration (seconds) |
 | `aspectRatio` | string | `"9:16"` | `9:16`, `16:9`, or `1:1` |
 | `enableCaptions` | boolean | `false` | Auto-generate captions on clips |
-| `enableAutoHook` | boolean | `true` | AI-generated hook titles |
+| `enableIntroTitle` | boolean | `false` | AI-generated hook titles |
 | `captionTemplateId` | string | `"karaoke"` | Caption style: `karaoke`, `word-by-word`, `sentence` |
 | `language` | string | `null` | ISO code (e.g. `en`, `hi`, `es`). `null` = auto-detect |
 | `timeframeStart` | number | `0` | Start time in seconds (skip intros) |
@@ -58,7 +58,7 @@ curl -X POST https://api.scalereach.ai/api/videos/youtube \
       "clipDurationMax": 90,
       "aspectRatio": "9:16",
       "enableCaptions": true,
-      "enableAutoHook": true,
+      "enableIntroTitle": true,
       "captionTemplateId": "karaoke"
     }
   }'
@@ -79,7 +79,7 @@ response = requests.post(
             "genre": "Auto",
             "aspectRatio": "9:16",
             "enableCaptions": True,
-            "enableAutoHook": True,
+            "enableIntroTitle": True,
         },
     },
 )
@@ -102,7 +102,7 @@ const response = await fetch("https://api.scalereach.ai/api/videos/youtube", {
       genre: "Auto",
       aspectRatio: "9:16",
       enableCaptions: true,
-      enableAutoHook: true,
+      enableIntroTitle: true,
     },
   }),
 });
