@@ -1,0 +1,297 @@
+---
+title: Use with Claude (MCP)
+description: Clip YouTube videos and schedule social posts by chatting with Claude — no code required.
+---
+
+## What is this?
+
+ScaleReach has an MCP integration that lets you clip YouTube videos and schedule social media posts by simply chatting with AI assistants like Claude. Instead of writing code or using the dashboard, you just tell Claude what you want in plain English.
+
+For example:
+
+> "Clip this YouTube video and find the funniest moments: https://youtube.com/watch?v=abc123"
+
+> "Schedule the best clip to my Instagram at 3pm tomorrow"
+
+Claude will ask you about your preferences and handle everything — clipping, scheduling, editing, cancelling — all through conversation.
+
+## What is MCP?
+
+MCP (Model Context Protocol) is a standard that lets AI assistants like Claude connect to external tools and services. Think of it like giving Claude the ability to use ScaleReach on your behalf.
+
+You don't need to understand how MCP works — just follow the setup steps below.
+
+## Prerequisites
+
+- A ScaleReach account with an active plan
+- An API key ([get one here](/docs/authentication))
+- One of these AI apps installed: [Claude Desktop](https://claude.ai/download), [Cursor](https://cursor.com), [Windsurf](https://codeium.com/windsurf), or [Kiro](https://kiro.dev)
+
+## Setup (5 minutes)
+
+### Step 1: Get your API key
+
+1. Log in to [ScaleReach](https://app.scalereach.ai)
+2. Go to **Settings → API Keys**
+3. Click **Create Key** and copy it (starts with `sr_live_`)
+
+<Callout type="warn">
+Save your API key somewhere safe — you can only see it once.
+</Callout>
+
+### Step 2: Connect to your AI app
+
+Pick the app you use and add the ScaleReach configuration.
+
+#### Claude Desktop
+
+Open the config file:
+- **Mac**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+Add this:
+
+```json
+{
+  "mcpServers": {
+    "scalereach": {
+      "command": "npx",
+      "args": ["-y", "scalereach-mcp"],
+      "env": {
+        "SCALEREACH_API_KEY": "sr_live_YOUR_KEY_HERE"
+      }
+    }
+  }
+}
+```
+
+Then restart Claude Desktop.
+
+#### Cursor
+
+Create or edit `.cursor/mcp.json` in your project folder:
+
+```json
+{
+  "mcpServers": {
+    "scalereach": {
+      "command": "npx",
+      "args": ["-y", "scalereach-mcp"],
+      "env": {
+        "SCALEREACH_API_KEY": "sr_live_YOUR_KEY_HERE"
+      }
+    }
+  }
+}
+```
+
+#### Windsurf
+
+Edit `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "scalereach": {
+      "command": "npx",
+      "args": ["-y", "scalereach-mcp"],
+      "env": {
+        "SCALEREACH_API_KEY": "sr_live_YOUR_KEY_HERE"
+      }
+    }
+  }
+}
+```
+
+#### Kiro
+
+Edit `.kiro/settings/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "scalereach": {
+      "command": "npx",
+      "args": ["-y", "scalereach-mcp"],
+      "env": {
+        "SCALEREACH_API_KEY": "sr_live_YOUR_KEY_HERE"
+      }
+    }
+  }
+}
+```
+
+<Callout type="info">
+Replace `sr_live_YOUR_KEY_HERE` with your actual API key from Step 1.
+</Callout>
+
+### Step 3: Start chatting
+
+Open your AI app and try one of these prompts:
+
+- *"Clip this YouTube video, find the most viral moments: https://youtube.com/watch?v=..."*
+- *"Make TikTok clips from this podcast, focus on the hot takes: https://youtube.com/watch?v=..."*
+- *"Extract business insights from this video, use hormozi caption style: https://youtube.com/watch?v=..."*
+
+Claude will ask you about:
+1. **Genre** — Podcast, Gaming, Education, Entertainment, or Auto-detect
+2. **Aspect ratio** — 9:16 (TikTok/Reels), 16:9 (YouTube), 1:1 (Instagram)
+3. **Clip duration** — How long each clip should be
+4. **Caption style** — Which visual template for captions
+5. **Custom focus** — Any specific topics or moments to look for
+
+Then it submits the video, waits for processing, and shows you the results.
+
+## Caption styles
+
+When Claude asks about caption style, these are your options:
+
+| Style | Vibe |
+|-------|------|
+| `classic` | Yellow highlight, Poppins font — most popular |
+| `hormozi` | Gold, Anton font — business/motivation |
+| `mrbeast-pro` | Green highlight — high energy |
+| `garyvee` | Red highlight — entrepreneurship |
+| `tiktok-native` | Pink — native TikTok look |
+| `cinematic` | Warm ivory — premium/documentary |
+| `neon-pop` | Cyan/magenta — eye-catching |
+| `simple` | Clean, no highlight — minimal |
+| `rainbow` | Multi-color — vibrant |
+| `electric-blue` | Cyan — gaming/tech |
+| `sunset-fire` | Orange — high energy |
+
+## Example conversation
+
+```
+You: Clip this video and find the funniest moments:
+     https://youtube.com/watch?v=dQw4w9WgXcQ
+
+Claude: I found the video: "Rick Astley - Never Gonna Give You Up"
+        (3:33, channel: Rick Astley)
+
+        Before I clip this, a few questions:
+        1. What genre? I'd guess Entertainment — sound right?
+        2. Aspect ratio? 9:16 for TikTok/Reels, or 16:9 for YouTube?
+        3. Clip length? 15-60 seconds work?
+        4. Caption style? I'd suggest "classic" or "neon-pop" for this vibe.
+
+You: Entertainment, 9:16, 30-60 seconds, classic style
+
+Claude: Submitted! Processing now...
+        Status: downloading → transcribing → analyzing...
+
+        Done! Found 4 clips:
+        1. [Score: 95] "Never Gonna Give You Up" (0:43-1:12)
+        2. [Score: 88] "The Dance Break" (1:45-2:15)
+        ...
+
+        Want me to get the download links?
+```
+
+## All available commands
+
+Once connected, Claude can do all of these:
+
+### Video clipping
+
+| What you can say | What happens |
+|-----------------|-------------|
+| "Clip this video: [url]" | Submit + configure + process |
+| "What videos do I have?" | List all your videos |
+| "Show me clips from my latest video" | Get generated clips |
+| "Download the best clip" | Get download URL |
+| "Delete that video" | Remove video and clips |
+| "Reprocess this video with different settings" | Regenerate clips |
+| "Check the status of my video" | See processing progress |
+
+### Social media scheduling
+
+| What you can say | What happens |
+|-----------------|-------------|
+| "Show my connected social accounts" | List Instagram, TikTok, YouTube accounts |
+| "Schedule this clip to Instagram at 3pm tomorrow" | Schedule a post for later |
+| "Post this clip to TikTok right now" | Post immediately |
+| "Show my scheduled posts" | List all pending/posted/failed posts |
+| "Change the caption on my scheduled post" | Edit a pending post |
+| "Reschedule that post to Friday at noon" | Change the scheduled time |
+| "Cancel the post I scheduled" | Cancel a pending post |
+
+<Callout type="info">
+To schedule posts, you need at least one social account connected in the ScaleReach dashboard first. Go to **Social → Connect Account** to link your Instagram, TikTok, or YouTube.
+</Callout>
+
+## Schedule posts — how it works
+
+Once your clips are ready and you have social accounts connected, you can schedule posts entirely through conversation.
+
+### Example: Schedule a clip
+
+```
+You: Schedule my best clip to Instagram tomorrow at 2pm
+
+Claude: Let me check your connected accounts and recent clips...
+
+        You have these social accounts:
+        1. @yourhandle (Instagram)
+        2. YourChannel (YouTube)
+
+        And your top clips:
+        1. [Score: 95] "The moment everything changed" (57s)
+        2. [Score: 88] "Hot take on AI" (42s)
+
+        Which clip should I schedule? And want to add a caption?
+
+You: The first one. Caption: "This changed everything 🔥" with hashtags
+     viral, motivation, mindset
+
+Claude: Scheduled! Here's what's queued:
+        📱 Instagram (@yourhandle)
+        📅 Tomorrow at 2:00 PM
+        📝 "This changed everything 🔥"
+        🏷️ #viral #motivation #mindset
+
+        Want to schedule it to YouTube too?
+```
+
+### Example: Edit or cancel a post
+
+```
+You: Show me my scheduled posts
+
+Claude: You have 2 pending posts:
+        1. Instagram — "This changed everything 🔥" — Tomorrow 2:00 PM
+        2. YouTube — "Hot take on AI" — Friday 12:00 PM
+
+You: Change the Instagram caption to "Wait for it... 🤯"
+
+Claude: Updated! New caption: "Wait for it... 🤯"
+        Everything else stays the same.
+
+You: Actually cancel the YouTube one
+
+Claude: Cancelled the YouTube post scheduled for Friday.
+```
+
+## Troubleshooting
+
+**"Command not found: npx"**
+You need Node.js installed. Download it from [nodejs.org](https://nodejs.org) (LTS version).
+
+**"Invalid API key"**
+Double-check your key starts with `sr_live_` and is correctly pasted in the config file.
+
+**"You don't have access to this workspace"**
+Your API key is tied to a specific workspace. Make sure you're using a key from the workspace you want to clip videos in.
+
+**Claude doesn't seem to have ScaleReach tools**
+Restart your AI app after editing the config file. Check that the JSON is valid (no trailing commas, correct quotes).
+
+## npm package
+
+The MCP server is open source and published on npm:
+
+```bash
+npm install scalereach-mcp
+```
+
+[View on npm](https://www.npmjs.com/package/scalereach-mcp)
